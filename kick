@@ -1,0 +1,55 @@
+const Discord= require("discord.js")
+
+module.exports.run = async (bot, message, args, ops) => {
+
+if (!message.member.hasPermission('KICK_MEMBERS')) return message.channel.send('Você não possui permissão para usar este comando.');
+      
+let member = message.mentions.members.first() || message.guild.members.get(args[0]);
+let reason = args.slice(1).join(' ');
+
+if (!member) return message.channel.send('Por favor, mencione o membro a ser kickado!');
+if (!member.kickable) return message.channel.send('Você não pode kickar esse usuário por ele ser de um cargo maior ou igual ao seu!');
+
+await member.kick(reason).catch(error => message.channel.send(`Desculpe, ocorreu algum erro. Error: ${error}`));
+
+
+let channel = member.guild.channels.find('name','🍭punições');
+  if (!channel) return;
+  let embed = new Discord.RichEmbed()
+  .setTitle('**🎈  Abusou Tomou 🔫**')
+  .addField("**👤 Usuário:** " , member.user.tag, true)
+  .addField(`**👮 Punido Por**`, message.author, true)
+  .addField("**📃 Motivo:** " , reason, true)
+  .setThumbnail(member.user.displayAvatarURL, true)
+  .setTimestamp()
+  .setFooter(`</HouseDev> • © CopyRight 2019`, bot.user.displayAvatarURL)
+  .setColor('RANDOM')
+
+  channel.sendEmbed(embed)
+
+  const razão = args.slice(1).join(" ")
+  const usuario = message.mentions.users.first();
+  const membro = message.mentions.members.first() || message.guild.members.get(args[0]);
+
+  message.mentions.members.first().kick().then((member) => {
+    const kickembed = new Discord.RichEmbed()
+
+    .setTitle('**💈 Você teve sorte desta vez, mas da próxima...**')
+    .addField(`**👮 Kickado Por**`, message.author.username, true)
+    .addField("**📃 Motivo:** " , reason, true)
+    .setThumbnail(member.user.displayAvatarURL, true)
+    .setFooter(`</HouseDev> • © CopyRight 2019`, bot.user.displayAvatarURL)
+    .setTimestamp()
+    .setColor("f002e7");
+    membro.send(kickembed)
+    membro.send(kickembed).then(msg => {
+        })
+  
+    })
+
+}
+
+
+module.exports.help = {
+    name: "kick"
+}
